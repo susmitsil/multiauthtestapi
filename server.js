@@ -138,20 +138,16 @@ function setupRoutes(routes, path, authScheme){
         }
 }
 
-/*
+
 app.listen(app.get('port'), function(req,res) {
   console.log('Express server listening on port ' + app.get('port'));
 });
-*/
 
-/*app.listen(8443, function(req,res) {
-  console.log('Express server listening on port ' + 8443);
-});*/
-
+/*
 https.createServer(opts, app).listen(3000, function () {
    console.log('Server listening on port ' + 3000);
 });
-
+*/
 
 function startServer(){
 
