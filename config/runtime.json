@@ -1,0 +1,29 @@
+{
+	"env": "local",
+	"processname": "cotrust-stresstest",
+	"request": {
+		"size": "16mb"
+	},
+	"userFilePath":"./data/userlist.txt",
+	"dataApiRoutes": {
+		"UserManagement": ["v1"]
+	},
+	"log4js": {
+		"replaceConsole": true,
+		"appenders": [{
+			"type": "console"
+		},
+		{
+			"type": "dateFile",
+			"filename": "logs/giftapp-${env}",
+			"pattern": "-yyyy-MM-dd.log",
+			"alwaysIncludePattern": true,
+			"layout": {
+				"type": "colored"
+			}
+		}],
+		"levels": {
+			"[default]": "all"
+		}
+	}
+}
