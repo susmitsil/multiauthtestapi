@@ -23,6 +23,7 @@
     "cfenv": "1.0.x",
     "chai-as-promised": "^5.3.0",
     "chai-http": "^2.0.1",
+    "client-certificate-auth": "^0.3.0",
     "collections": "^3.0.0",
     "config": "^1.20.1",
     "connect-busboy": "0.0.2",

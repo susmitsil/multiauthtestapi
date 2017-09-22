@@ -29,6 +29,8 @@ function greetUser(request, response) {
 
         logHelper.logEntryAndInput(logger, 'greetUser', {});
 
+        console.log(request.connection.getPeerCertificate().subject.CN);
+
         var params = {};
         //params = request.body;
         params = request.params;

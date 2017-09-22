@@ -17,35 +17,60 @@ var config = require('config');
 
 var swaggerJSDoc = require('swagger-jsdoc');
 
+var clientCertificateAuth = require('client-certificate-auth');
 var https = require('https');
 
 var opts = {
   // Specify the key file for the server
-  key: fs.readFileSync('cert/multiauth-ca-server.key'),
+  //key: fs.readFileSync('cert/multiauth-ca-server.key'),
+  key: fs.readFileSync('cert/pack1/server.key'),
    
   // Specify the certificate file
-  cert: fs.readFileSync('cert/multiauth-ca-server.cer'),
+  //cert: fs.readFileSync('cert/multiauth-ca-server.cer'),
+  cert: fs.readFileSync('cert/pack1/server.crt'),
    
   // Specify the Certificate Authority certificate
   //ca: fs.readFileSync('ssl/ca/ca.crt'),
+  ca: fs.readFileSync('cert/pack1/ca.crt'),
    
   // This is where the magic happens in Node.  All previous
   // steps simply setup SSL (except the CA).  By requesting
   // the client provide a certificate, we are essentially
   // authenticating the user.
-  requestCert: false,
+  requestCert: true,
 
-  passphrase: "abcd1234"
+  passphrase: "abcd1234",
    
   // If specified as "true", no unauthenticated traffic
   // will make it to the route specified.
-  //rejectUnauthorized: true
+  rejectUnauthorized: true
 };
 
 var app = express();
 
 var cors = require('cors');
 app.use(cors());
+
+
+var checkAuth = function(cert) {
+ /*
+  * allow access if certificate subject Common Name is 'Doug Prishpreed'.
+  * this is one of many ways you can authorize only certain authenticated
+  * certificate-holders; you might instead choose to check the certificate
+  * fingerprint, or apply some sort of role-based security based on e.g. the OU
+  * field of the certificate. You can also link into another layer of
+  * auth or session middleware here; for instance, you might pass the subject CN
+  * as a username to log the user in to your underlying authentication/session
+  * management layer.
+  */
+  console.log('cert.subject.CN: ',cert);
+  console.log('cert.subject.CN: '+cert.subject.CN);
+  return cert.subject.CN === 'abc.com';
+  //return true;
+};
+
+app.use(clientCertificateAuth(checkAuth));
+
 
 //swagger definition
 var swaggerDefinition = {
@@ -138,16 +163,20 @@ function setupRoutes(routes, path, authScheme){
         }
 }
 
-
+/*
 app.listen(app.get('port'), function(req,res) {
   console.log('Express server listening on port ' + app.get('port'));
 });
-
-/*
-https.createServer(opts, app).listen(3000, function () {
-   console.log('Server listening on port ' + 3000);
-});
 */
+
+https.createServer(opts, app,function (req, res) {
+  //res.writeHead(200);
+  //console.log("request: " + req.connection.getPeerCertificate().subject.CN);
+  //res.end("Hellod, " + req.connection.getPeerCertificate().subject.CN + "\n");
+}).listen(app.get('port'), function () {
+   console.log('Server listening on port ' + app.get('port'));
+});
+
 
 function startServer(){
 
