@@ -32,9 +32,11 @@ var options3 = {
 	ca: fs.readFileSync("cert/pack1/ca.crt")
 };
 
-var req = https.request(options, function(res) {
+var req = https.request(options3, function(res) {
 	console.log("statusCode: ", res.statusCode);
 	console.log("headers: ", res.headers);
+
+	console.log(res.connection.getPeerCertificate().subject.CN);
 	
 	res.on('data', function(d) {
     	process.stdout.write(d);
